@@ -53,24 +53,31 @@ export default function Lab3Page() {
         <h2 id="prerequisites" className="text-2xl font-bold mt-10 mb-6 text-gray-900">Prerequisites Check</h2>
 
         <p className="mb-4 text-gray-700 leading-relaxed">
-          <strong>Before starting Lab 3, ensure you have:</strong>
+          <strong>Before starting Lab 3, ensure you have completed Labs 1 & 2:</strong>
         </p>
 
         <ul className="mb-6 ml-6 space-y-2">
-          <li className="text-gray-700">✅ Next.js app running at http://localhost:3000</li>
-          <li className="text-gray-700">✅ Flask MLOps service running at http://localhost:5001</li>
-          <li className="text-gray-700">✅ Health endpoint responding: <code className="bg-gray-100 px-1 py-0.5 rounded text-sm font-mono">curl http://localhost:5001/health</code></li>
-          <li className="text-gray-700">✅ Metrics tracking working: chat with AI and see metrics at <code className="bg-gray-100 px-1 py-0.5 rounded text-sm font-mono">http://localhost:5001/metrics</code></li>
+          <li className="text-gray-700">✅ MLOps service code exists in <code className="bg-gray-100 px-1 py-0.5 rounded text-sm font-mono">mlops-service/app.py</code></li>
+          <li className="text-gray-700">✅ Python virtual environment set up in <code className="bg-gray-100 px-1 py-0.5 rounded text-sm font-mono">mlops-service/venv/</code></li>
+          <li className="text-gray-700">✅ Requirements installed (Flask, pytest, etc.)</li>
+          <li className="text-gray-700">✅ Test file exists: <code className="bg-gray-100 px-1 py-0.5 rounded text-sm font-mono">mlops-service/test_app.py</code></li>
         </ul>
 
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
           <h4 className="font-semibold text-blue-800 mb-2">🔍 Quick Test</h4>
           <ol className="text-blue-700 space-y-1">
-            <li>1. Start both services (Next.js and Flask)</li>
-            <li>2. Chat with your AI at localhost:3000</li>
-            <li>3. Check metrics appear at localhost:5001/metrics</li>
+            <li>1. <code className="bg-white px-1 py-0.5 rounded text-sm font-mono">cd mlops-service</code></li>
+            <li>2. <code className="bg-white px-1 py-0.5 rounded text-sm font-mono">source venv/bin/activate</code> (or Windows equivalent)</li>
+            <li>3. <code className="bg-white px-1 py-0.5 rounded text-sm font-mono">pytest --version</code> - should show pytest version</li>
             <li>4. If this works, you're ready for Lab 3!</li>
           </ol>
+        </div>
+
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+          <h4 className="font-semibold text-yellow-800 mb-2">📝 Note: Services Not Required</h4>
+          <p className="text-yellow-700">
+            You don't need Next.js or Flask services running for Lab 3 unit tests. We'll test integration separately in Part E.
+          </p>
         </div>
 
         <h2 id="part-a" className="text-2xl font-bold mt-10 mb-6 text-gray-900">Part A: Install Testing Tools</h2>
@@ -207,33 +214,41 @@ E       AssertionError: assert 404 == 200
 
 ========================= 1 failed, 2 passed in 0.30s =========================`}</CodeBlock>
 
-        <h3 id="test-scenarios" className="text-xl font-semibold mt-8 mb-4 text-gray-900">3. Test Scenarios to Try</h3>
+        <h3 id="test-scenarios" className="text-xl font-semibold mt-8 mb-4 text-gray-900">3. Key Testing Principle</h3>
 
-        <p className="mb-4 text-gray-700 leading-relaxed">
-          <strong>Test with your Flask service running:</strong>
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+          <h4 className="font-semibold text-blue-800 mb-2">💡 Important: Tests Don't Need Running Services</h4>
+          <p className="text-blue-700 mb-2">Your tests run completely independently:</p>
+          <ul className="text-blue-700 space-y-1 text-sm">
+            <li>• <strong>No need to start Flask service</strong> (python app.py)</li>
+            <li>• <strong>No need to start Next.js</strong> (npm run dev)</li>
+            <li>• <strong>Just activate Python environment</strong> and run pytest</li>
+            <li>• Tests use Flask's test client (simulated requests)</li>
+          </ul>
+        </div>
+
+        <p className="mb-2 text-gray-700 leading-relaxed">
+          <strong>Simple test workflow:</strong>
         </p>
 
-        <CodeBlock language="bash">{`# Terminal 1: Start Flask service
-python app.py
+        <CodeBlock language="bash">{`# 1. Navigate to MLOps directory
+cd mlops-service
 
-# Terminal 2: Run tests (in same mlops-service directory)
+# 2. Activate Python environment
+source venv/bin/activate  # Mac/Linux
+# OR: venv\Scripts\activate  # Windows
+
+# 3. Run tests (no services needed!)
 pytest test_app.py -v`}</CodeBlock>
 
-        <p className="mb-4 text-gray-700 leading-relaxed">
-          <strong>Test with Flask service stopped:</strong>
-        </p>
-
-        <CodeBlock language="bash">{`# Stop Flask service (Ctrl+C in Terminal 1)
-# Run tests again
-pytest test_app.py -v`}</CodeBlock>
-
-        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
-          <h4 className="font-semibold text-yellow-800 mb-2">🤔 What Should Happen?</h4>
-          <p className="text-yellow-700 mb-2">Tests should pass whether Flask is running or not because:</p>
-          <ul className="text-yellow-700 space-y-1 text-sm">
-            <li>• Tests use a test client that simulates requests</li>
-            <li>• Tests don't depend on the actual Flask server running</li>
-            <li>• Tests create their own isolated environment</li>
+        <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+          <h4 className="font-semibold text-green-800 mb-2">✅ Why This Works</h4>
+          <p className="text-green-700 mb-2">Flask test client creates an isolated test environment:</p>
+          <ul className="text-green-700 space-y-1 text-sm">
+            <li>• Tests simulate HTTP requests without real server</li>
+            <li>• Each test gets a fresh Flask application instance</li>
+            <li>• No ports, no network calls, no external dependencies</li>
+            <li>• This is standard practice in professional development</li>
           </ul>
         </div>
 

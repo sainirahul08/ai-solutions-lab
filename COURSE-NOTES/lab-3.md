@@ -21,19 +21,23 @@ You must complete Labs 1 & 2 and have a working Flask MLOps service before start
 
 ## Prerequisites Check
 
-**Before starting Lab 3, ensure you have:**
+**Before starting Lab 3, ensure you have completed Labs 1 & 2:**
 
-- ✅ Next.js app running at http://localhost:3000
-- ✅ Flask MLOps service running at http://localhost:5001
-- ✅ Health endpoint responding: `curl http://localhost:5001/health`
-- ✅ Metrics tracking working: chat with AI and see metrics at `http://localhost:5001/metrics`
+- ✅ MLOps service code exists in `mlops-service/app.py`
+- ✅ Python virtual environment set up in `mlops-service/venv/`
+- ✅ Requirements installed (Flask, pytest, etc.)
+- ✅ Test file exists: `mlops-service/test_app.py`
 
 ### 🔍 Quick Test
 
-1. Start both services (Next.js and Flask)
-2. Chat with your AI at localhost:3000
-3. Check metrics appear at localhost:5001/metrics
+1. `cd mlops-service`
+2. `source venv/bin/activate` (or Windows equivalent)
+3. `pytest --version` - should show pytest version
 4. If this works, you're ready for Lab 3!
+
+### 📝 Note: Services Not Required
+
+You don't need Next.js or Flask services running for Lab 3 unit tests. We'll test integration separately in Part E.
 
 ## Part A: Install Testing Tools
 
@@ -148,30 +152,36 @@ E       AssertionError: assert 404 == 200
 ========================= 1 failed, 2 passed in 0.30s =========================
 ```
 
-### 3. Test Scenarios to Try
+### 3. Key Testing Principle
 
-**Test with your Flask service running:**
+#### 💡 Important: Tests Don't Need Running Services
+
+Your tests run completely independently:
+- **No need to start Flask service** (python app.py)
+- **No need to start Next.js** (npm run dev)
+- **Just activate Python environment** and run pytest
+- Tests use Flask's test client (simulated requests)
+
+**Simple test workflow:**
 ```bash
-# Terminal 1: Start Flask service
-python app.py
+# 1. Navigate to MLOps directory
+cd mlops-service
 
-# Terminal 2: Run tests (in same mlops-service directory)
+# 2. Activate Python environment
+source venv/bin/activate  # Mac/Linux
+# OR: venv\Scripts\activate  # Windows
+
+# 3. Run tests (no services needed!)
 pytest test_app.py -v
 ```
 
-**Test with Flask service stopped:**
-```bash
-# Stop Flask service (Ctrl+C in Terminal 1)
-# Run tests again
-pytest test_app.py -v
-```
+#### ✅ Why This Works
 
-### 🤔 What Should Happen?
-
-Tests should pass whether Flask is running or not because:
-- Tests use a test client that simulates requests
-- Tests don't depend on the actual Flask server running
-- Tests create their own isolated environment
+Flask test client creates an isolated test environment:
+- Tests simulate HTTP requests without real server
+- Each test gets a fresh Flask application instance
+- No ports, no network calls, no external dependencies
+- This is standard practice in professional development
 
 ## Part D: Test-Driven Development
 
