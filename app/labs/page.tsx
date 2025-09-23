@@ -51,7 +51,7 @@ export default function LabsPage() {
                   </div>
 
                   <Link
-                    href={lab.id === 'lab1' ? '/labs/lab1' : lab.id === 'lab2' ? '/labs/lab2' : `/labs/${lab.id}`}
+                    href={`/labs/${lab.id}`}
                     className="text-blue-600 hover:text-blue-700 font-medium text-xs sm:text-sm lg:text-base inline-flex items-center"
                   >
                     Start Lab →

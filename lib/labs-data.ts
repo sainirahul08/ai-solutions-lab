@@ -26,6 +26,14 @@ export function getAllLabsSummary(): LabSummary[] {
       duration: '3-4 hours',
       level: 'Intermediate',
       technology: 'Flask + Prometheus'
+    },
+    {
+      id: 'lab3',
+      title: 'Lab 3: Testing AI Systems',
+      description: 'Learn to test your Flask MLOps service with pytest, validate metrics tracking, and ensure your AI monitoring system works reliably.',
+      duration: '2-3 hours',
+      level: 'Intermediate',
+      technology: 'Pytest Testing'
     }
   ];
 }

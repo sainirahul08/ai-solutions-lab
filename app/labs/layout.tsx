@@ -53,6 +53,29 @@ const labConfigs = {
       { id: 'part-c', title: 'Part C: Next.js Integration' },
       { id: 'troubleshooting', title: 'Troubleshooting' },
     ]
+  },
+  'lab3': {
+    title: 'Lab 3: Testing AI Systems',
+    sections: [
+      { id: 'overview', title: 'Lab Overview' },
+      { id: 'prerequisites', title: 'Prerequisites Check' },
+      { id: 'part-a', title: 'Part A: Install Testing Tools' },
+      { id: 'pytest-setup', title: '1. Install Pytest' },
+      { id: 'part-b', title: 'Part B: Understanding Tests' },
+      { id: 'test-structure', title: '1. Test File Overview' },
+      { id: 'test-categories', title: '2. Test Categories' },
+      { id: 'part-c', title: 'Part C: Running Tests' },
+      { id: 'basic-test-run', title: '1. Basic Test Execution' },
+      { id: 'test-output', title: '2. Understanding Output' },
+      { id: 'test-scenarios', title: '3. Test Scenarios' },
+      { id: 'part-d', title: 'Part D: Test-Driven Development' },
+      { id: 'add-test', title: '1. Add Your Own Test' },
+      { id: 'optional-configs', title: '2. Optional Configuration' },
+      { id: 'part-e', title: 'Part E: Integration Testing' },
+      { id: 'end-to-end', title: '1. End-to-End Test' },
+      { id: 'ai-integration', title: '2. AI Integration Test' },
+      { id: 'troubleshooting', title: 'Troubleshooting' },
+    ]
   }
 }
 
