@@ -76,6 +76,30 @@ const labConfigs = {
       { id: 'ai-integration', title: '2. AI Integration Test' },
       { id: 'troubleshooting', title: 'Troubleshooting' },
     ]
+  },
+  'lab4': {
+    title: 'Lab 4: Deployment Pipelines (CI/CD)',
+    sections: [
+      { id: 'overview', title: 'Lab Overview' },
+      { id: 'prerequisites', title: 'Prerequisites Check' },
+      { id: 'part-a', title: 'Part A: GitHub Repository Setup' },
+      { id: 'repo-setup', title: '1. Repository Configuration' },
+      { id: 'secrets-setup', title: '2. Environment Secrets' },
+      { id: 'part-b', title: 'Part B: Next.js CI/CD Pipeline' },
+      { id: 'nextjs-workflow', title: '1. GitHub Actions Workflow' },
+      { id: 'trigger-workflow', title: '2. Trigger Your First Workflow' },
+      { id: 'part-c', title: 'Part C: MLOps Service CI/CD' },
+      { id: 'mlops-workflow', title: '1. MLOps Workflow Overview' },
+      { id: 'test-mlops-pipeline', title: '2. Test MLOps Pipeline' },
+      { id: 'part-d', title: 'Part D: Environment Management' },
+      { id: 'env-strategy', title: '1. Environment Strategy' },
+      { id: 'env-files', title: '2. Environment File Template' },
+      { id: 'part-e', title: 'Part E: Advanced Pipeline Features' },
+      { id: 'branch-protection', title: '1. Branch Protection Rules' },
+      { id: 'deployment-environments', title: '2. Deployment Environments' },
+      { id: 'monitoring-deployments', title: '3. Monitoring Deployments' },
+      { id: 'troubleshooting', title: 'Troubleshooting' },
+    ]
   }
 }
 
