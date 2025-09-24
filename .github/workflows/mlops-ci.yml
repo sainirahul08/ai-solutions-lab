@@ -4,7 +4,7 @@ name: MLOps Service Testing
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ main, develop, test-cicd ]
     paths:
       - 'mlops-service/**'
   pull_request:

@@ -4,7 +4,7 @@ name: Next.js Testing
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ main, develop, test-cicd ]
     paths:
       - 'app/**'
       - 'components/**'
