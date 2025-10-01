@@ -35,4 +35,4 @@ test-prometheus-integration2.js
 
 LAB2-README.md
 dvc.yaml
-/__test__/
+/__tests__/
