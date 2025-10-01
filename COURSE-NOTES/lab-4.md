@@ -67,22 +67,109 @@ Never commit `.env` files to your repository! The `.gitignore` file prevents acc
 
 *Create automated testing for your Next.js application*
 
-### 1. GitHub Actions Workflow
+### 1. Create Next.js Workflow
 
-Your repository already includes the workflow files. Let's examine what they do:
+**Create the workflow directory structure:**
 
-**Next.js workflow location:** `.github/workflows/nextjs-ci.yml`
+```bash
+# Create .github/workflows directory
+mkdir -p .github/workflows
+```
 
-#### What the Next.js Pipeline Does:
+**Create the Next.js workflow file:**
+
+Create a file at `.github/workflows/nextjs-ci.yml` with the following content:
+
+```yaml
+name: Next.js Testing
+# Lab 4: Deployment Pipelines (CI/CD)
+# This workflow handles automated testing of the Next.js application
+
+on:
+  push:
+    branches: [ main, develop, test-cicd ]
+    paths:
+      - 'app/**'
+      - 'components/**'
+      - 'lib/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'next.config.js'
+      - 'tailwind.config.js'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'app/**'
+      - 'components/**'
+      - 'lib/**'
+      - 'package.json'
+      - 'package-lock.json'
+
+jobs:
+  # Test Job - Runs comprehensive testing
+  test:
+    name: Test Next.js Application
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Set up Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      # Install dependencies
+      - name: Install dependencies
+        run: npm ci
+
+      # Run comprehensive test suite
+      - name: Run test suite
+        run: npm test
+        env:
+          # Test environment variables
+          NODE_ENV: test
+
+      # Run linting (if ESLint is configured)
+      - name: Run linting
+        run: npm run lint || echo "Linting not configured, skipping..."
+        continue-on-error: true
+
+      # Run type checking (if TypeScript is configured)
+      - name: Type check
+        run: npx tsc --noEmit || echo "TypeScript not configured, skipping..."
+        continue-on-error: true
+
+      # Build the application
+      - name: Build application
+        run: npm run build
+
+      # Verify build output
+      - name: Verify build output
+        run: |
+          if [ -d ".next" ]; then
+            echo "Build successful - .next directory exists"
+            ls -la .next/
+          else
+            echo "Build failed - .next directory not found"
+            exit 1
+          fi
+```
+
+#### What This Workflow Does:
 
 - **Triggers:** Runs on push to main/develop, or pull requests
-- **Setup:** Installs Node.js 18 and dependencies
+- **Setup:** Installs Node.js 18 and dependencies with `npm ci`
 - **Testing:** Runs comprehensive test suite with Jest
-- **Linting:** Runs ESLint for code quality
-- **Type Checking:** Validates TypeScript types
+- **Linting:** Runs ESLint to check code quality (optional)
+- **Type Checking:** Validates TypeScript types (optional)
 - **Building:** Creates production build to verify deployment readiness
 
-### 2. Trigger Your First Workflow
+### 2. Test Your Workflows
 
 **Make a simple change to trigger the pipeline:**
 
@@ -109,22 +196,103 @@ git push origin main
 - All tests pass
 - Build creates `.next` directory
 
-## Part C: MLOps Service Testing Pipeline
+### 3. Create MLOps Service Workflow
 
-*Automate testing of your Flask MLOps service*
+**Create the MLOps workflow file:**
 
-### 1. MLOps Workflow Overview
+Create a file at `.github/workflows/mlops-ci.yml` with the following content:
 
-**MLOps workflow location:** `.github/workflows/mlops-ci.yml`
+```yaml
+name: MLOps Service Testing
+# Lab 4: Deployment Pipelines (CI/CD)
+# This workflow handles automated testing of the Flask MLOps service
 
-#### What the MLOps Pipeline Does:
+on:
+  push:
+    branches: [ main, develop, test-cicd ]
+    paths:
+      - 'mlops-service/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'mlops-service/**'
 
-- **Test Job:** Runs your Lab 3 pytest suite automatically
-- **Flask Startup:** Tests that the Flask service can start
-- **Security:** Basic security scanning with Bandit
-- **Code Quality:** Validates Python code structure
+jobs:
+  # Test Job - Runs pytest suite from Lab 3
+  test:
+    name: Test MLOps Service
+    runs-on: ubuntu-latest
 
-### 2. Test MLOps Pipeline
+    defaults:
+      run:
+        working-directory: ./mlops-service
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Set up Python
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      # Install dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # Run pytest suite (from Lab 3)
+      - name: Run tests
+        run: |
+          echo "Running MLOps service tests..."
+          pytest test_app.py -v --tb=short
+        env:
+          # Test environment variables
+          FLASK_ENV: testing
+          TESTING: true
+
+      # Test Flask app can start
+      - name: Test Flask startup
+        run: |
+          echo "Testing Flask service startup..."
+          timeout 10s python app.py &
+          sleep 5
+
+          # Test health endpoint
+          curl -f http://localhost:5001/health || {
+            echo "Health check failed"
+            exit 1
+          }
+
+          echo "Flask service starts successfully"
+
+      # Security scan
+      - name: Security scan
+        run: |
+          echo "Running basic security checks..."
+          pip install safety
+          safety check || echo "Security warnings found, review before production"
+        continue-on-error: true
+```
+
+#### What This Workflow Does:
+
+- **Triggers:** Runs when mlops-service/ files change
+- **Setup:** Installs Python 3.9 and Flask dependencies
+- **Testing:** Runs your Lab 3 pytest suite automatically
+- **Flask Startup:** Verifies the service can start and respond
+- **Security Scan:** Checks for vulnerable dependencies
+
+**💡 What Gets Tested:** The MLOps workflow automatically runs all the tests you created in Lab 3:
+- Health endpoint availability
+- Prometheus metrics endpoint
+- Metrics tracking functionality
+- Error handling and validation
+
+### 4. Test Your MLOps Workflow
 
 **Make a change to the MLOps service:**
 
@@ -148,14 +316,21 @@ git push origin main
 3. Click to see: Test → Security Scan jobs
 4. Notice how your Lab 3 tests run automatically!
 
-### 💡 Key Learning
+**Watch both workflows run:**
+
+1. Go to Actions tab in GitHub
+2. You should see both "Next.js Testing" and "MLOps Service Testing" workflows
+3. Click to see detailed logs for each
+4. Notice how your Lab 3 tests run automatically!
+
+**💡 Key Learning:**
 
 Your Lab 3 tests are now part of automated testing:
 - Every commit runs `pytest test_app.py` automatically
 - Failed tests are immediately visible in GitHub
 - This catches bugs before they reach staging or production
 
-## Part D: Manual Vercel Deployment
+## Part C: Manual Vercel Deployment
 
 ### 1. Vercel Staging Setup
 
@@ -193,7 +368,7 @@ code .env  # or your preferred editor
 #### ⚠️ Never Commit .env Files
 The `.env` file is in `.gitignore` to prevent accidental commits of secrets.
 
-## Part E: Advanced Pipeline Features
+## Part D: Advanced Pipeline Features
 
 ### 1. Branch Protection Rules
 

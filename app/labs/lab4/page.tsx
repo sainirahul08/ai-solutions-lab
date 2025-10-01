@@ -106,24 +106,110 @@ export default function Lab4Page() {
           GitHub Actions will automatically test your code on every commit
         </p>
 
-        <h3 id="nextjs-workflow" className="text-xl font-semibold mt-8 mb-4 text-gray-900">1. GitHub Actions Workflow</h3>
+        <h3 id="nextjs-workflow" className="text-xl font-semibold mt-8 mb-4 text-gray-900">1. Create Next.js Workflow</h3>
 
         <p className="mb-4 text-gray-700 leading-relaxed">
-          Your repository already includes the workflow files. Let's examine what they do:
+          <strong>Create the workflow directory structure:</strong>
+        </p>
+
+        <CodeBlock language="bash">{`# Create .github/workflows directory
+mkdir -p .github/workflows`}</CodeBlock>
+
+        <p className="mb-4 text-gray-700 leading-relaxed">
+          <strong>Create the Next.js workflow file:</strong>
         </p>
 
         <p className="mb-2 text-gray-700 leading-relaxed">
-          <strong>Next.js workflow location:</strong> <code className="bg-gray-100 px-1 py-0.5 rounded text-sm font-mono">.github/workflows/nextjs-ci.yml</code>
+          Create a file at <code className="bg-gray-100 px-1 py-0.5 rounded text-sm font-mono">.github/workflows/nextjs-ci.yml</code> with the following content:
         </p>
 
-        <h4 className="text-lg font-semibold mt-6 mb-3 text-gray-900">What the Testing Pipeline Does:</h4>
+        <CodeBlock language="yaml">{`name: Next.js Testing
+# Lab 4: Deployment Pipelines (CI/CD)
+# This workflow handles automated testing of the Next.js application
+
+on:
+  push:
+    branches: [ main, develop, test-cicd ]
+    paths:
+      - 'app/**'
+      - 'components/**'
+      - 'lib/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'next.config.js'
+      - 'tailwind.config.js'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'app/**'
+      - 'components/**'
+      - 'lib/**'
+      - 'package.json'
+      - 'package-lock.json'
+
+jobs:
+  # Test Job - Runs comprehensive testing
+  test:
+    name: Test Next.js Application
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Set up Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      # Install dependencies
+      - name: Install dependencies
+        run: npm ci
+
+      # Run comprehensive test suite
+      - name: Run test suite
+        run: npm test
+        env:
+          # Test environment variables
+          NODE_ENV: test
+
+      # Run linting (if ESLint is configured)
+      - name: Run linting
+        run: npm run lint || echo "Linting not configured, skipping..."
+        continue-on-error: true
+
+      # Run type checking (if TypeScript is configured)
+      - name: Type check
+        run: npx tsc --noEmit || echo "TypeScript not configured, skipping..."
+        continue-on-error: true
+
+      # Build the application
+      - name: Build application
+        run: npm run build
+
+      # Verify build output
+      - name: Verify build output
+        run: |
+          if [ -d ".next" ]; then
+            echo "Build successful - .next directory exists"
+            ls -la .next/
+          else
+            echo "Build failed - .next directory not found"
+            exit 1
+          fi`}</CodeBlock>
+
+        <h4 className="text-lg font-semibold mt-6 mb-3 text-gray-900">What This Workflow Does:</h4>
 
         <ul className="mb-6 ml-6 space-y-2">
           <li className="text-gray-700"><strong>Triggers:</strong> Runs on push to main/develop, or pull requests</li>
-          <li className="text-gray-700"><strong>Setup:</strong> Installs Node.js 18 and dependencies</li>
+          <li className="text-gray-700"><strong>Setup:</strong> Installs Node.js 18 and dependencies with <code className="bg-gray-100 px-1 py-0.5 rounded text-sm font-mono">npm ci</code></li>
           <li className="text-gray-700"><strong>Testing:</strong> Runs comprehensive test suite with Jest</li>
-          <li className="text-gray-700"><strong>Linting:</strong> Checks code quality and type safety</li>
-          <li className="text-gray-700"><strong>Building:</strong> Verifies production build works</li>
+          <li className="text-gray-700"><strong>Linting:</strong> Runs ESLint to check code quality (optional)</li>
+          <li className="text-gray-700"><strong>Type Checking:</strong> Validates TypeScript types (optional)</li>
+          <li className="text-gray-700"><strong>Building:</strong> Creates production build to verify deployment readiness</li>
         </ul>
 
         <h3 id="trigger-workflow" className="text-xl font-semibold mt-8 mb-4 text-gray-900">2. Test Your Workflows</h3>
@@ -168,6 +254,113 @@ git push origin main`}</CodeBlock>
             <li>• Green checkmark next to your commit</li>
             <li>• "Test Next.js Application" job completes successfully</li>
             <li>• Build creates <code className="bg-white px-1 py-0.5 rounded text-xs font-mono">.next</code> directory</li>
+          </ul>
+        </div>
+
+        <h3 id="mlops-workflow" className="text-xl font-semibold mt-8 mb-4 text-gray-900">3. Create MLOps Service Workflow</h3>
+
+        <p className="mb-4 text-gray-700 leading-relaxed">
+          <strong>Create the MLOps workflow file:</strong>
+        </p>
+
+        <p className="mb-2 text-gray-700 leading-relaxed">
+          Create a file at <code className="bg-gray-100 px-1 py-0.5 rounded text-sm font-mono">.github/workflows/mlops-ci.yml</code> with the following content:
+        </p>
+
+        <CodeBlock language="yaml">{`name: MLOps Service Testing
+# Lab 4: Deployment Pipelines (CI/CD)
+# This workflow handles automated testing of the Flask MLOps service
+
+on:
+  push:
+    branches: [ main, develop, test-cicd ]
+    paths:
+      - 'mlops-service/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'mlops-service/**'
+
+jobs:
+  # Test Job - Runs pytest suite from Lab 3
+  test:
+    name: Test MLOps Service
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./mlops-service
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Set up Python
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      # Install dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # Run pytest suite (from Lab 3)
+      - name: Run tests
+        run: |
+          echo "Running MLOps service tests..."
+          pytest test_app.py -v --tb=short
+        env:
+          # Test environment variables
+          FLASK_ENV: testing
+          TESTING: true
+
+      # Test Flask app can start
+      - name: Test Flask startup
+        run: |
+          echo "Testing Flask service startup..."
+          timeout 10s python app.py &
+          sleep 5
+
+          # Test health endpoint
+          curl -f http://localhost:5001/health || {
+            echo "Health check failed"
+            exit 1
+          }
+
+          echo "Flask service starts successfully"
+
+      # Security scan
+      - name: Security scan
+        run: |
+          echo "Running basic security checks..."
+          pip install safety
+          safety check || echo "Security warnings found, review before production"
+        continue-on-error: true`}</CodeBlock>
+
+        <h4 className="text-lg font-semibold mt-6 mb-3 text-gray-900">What This Workflow Does:</h4>
+
+        <ul className="mb-6 ml-6 space-y-2">
+          <li className="text-gray-700"><strong>Triggers:</strong> Runs when mlops-service/ files change</li>
+          <li className="text-gray-700"><strong>Setup:</strong> Installs Python 3.9 and Flask dependencies</li>
+          <li className="text-gray-700"><strong>Testing:</strong> Runs your Lab 3 pytest suite automatically</li>
+          <li className="text-gray-700"><strong>Flask Startup:</strong> Verifies the service can start and respond</li>
+          <li className="text-gray-700"><strong>Security Scan:</strong> Checks for vulnerable dependencies</li>
+        </ul>
+
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+          <h4 className="font-semibold text-blue-800 mb-2">💡 What Gets Tested</h4>
+          <p className="text-blue-700 mb-2">
+            The MLOps workflow automatically runs all the tests you created in Lab 3:
+          </p>
+          <ul className="text-blue-700 space-y-1 text-sm">
+            <li>• Health endpoint availability</li>
+            <li>• Prometheus metrics endpoint</li>
+            <li>• Metrics tracking functionality</li>
+            <li>• Error handling and validation</li>
           </ul>
         </div>
 
