@@ -34,6 +34,14 @@ export function getAllLabsSummary(): LabSummary[] {
       duration: '2-3 hours',
       level: 'Intermediate',
       technology: 'Pytest Testing'
+    },
+    {
+      id: 'lab4',
+      title: 'Lab 4: Deployment Pipelines (CI/CD)',
+      description: 'Build automated CI/CD pipelines with GitHub Actions to test, build, and deploy your AI application to production environments.',
+      duration: '3-4 hours',
+      level: 'Advanced',
+      technology: 'GitHub Actions'
     }
   ];
 }
