@@ -42,6 +42,14 @@ export function getAllLabsSummary(): LabSummary[] {
       duration: '3-4 hours',
       level: 'Advanced',
       technology: 'GitHub Actions'
+    },
+    {
+      id: 'lab5',
+      title: 'Lab 5: Containerization with Docker',
+      description: 'Learn Docker basics and containerize your Flask MLOps service for consistent deployment across different environments.',
+      duration: '2-3 hours',
+      level: 'Advanced',
+      technology: 'Docker'
     }
   ];
 }
