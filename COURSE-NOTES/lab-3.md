@@ -1,6 +1,5 @@
 # Lab 3: Testing AI Systems
 
-**Duration:** 2-3 hours
 **Level:** Intermediate
 **Technology:** Pytest Testing
 
@@ -8,7 +7,6 @@ Learn to test your Flask MLOps service with pytest, validate metrics tracking, a
 
 ## Lab Overview
 
-**Time Required:** 2-3 hours
 **What You'll Do:** Write comprehensive tests for your Flask MLOps service to ensure it tracks AI performance correctly and handles errors gracefully
 
 **Lab Collaborators:**

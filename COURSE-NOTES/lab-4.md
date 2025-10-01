@@ -1,6 +1,5 @@
 # Lab 4: Deployment Pipelines (CI/CD)
 
-**Duration:** 3-4 hours
 **Level:** Advanced
 **Technology:** GitHub Actions
 
@@ -8,7 +7,6 @@ Build automated testing pipelines with GitHub Actions and learn manual deploymen
 
 ## Lab Overview
 
-**Time Required:** 3-4 hours
 **What You'll Do:** Create automated testing pipelines that test your code on every commit and deploy to Vercel staging manually
 
 **Lab Collaborators:**
