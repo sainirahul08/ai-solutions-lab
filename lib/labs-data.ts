@@ -52,6 +52,13 @@ export function getAllLabsSummary(): LabSummary[] {
       description: 'Install Kubernetes locally (minikube), deploy your containerized Flask service, and learn how to scale it up and down with simple commands.',
       level: 'Advanced',
       technology: 'Kubernetes'
+    },
+    {
+      id: 'lab7',
+      title: 'Lab 7: Cloud Deployment with AWS',
+      description: 'Deploy your complete AI application stack to production: Next.js to Vercel and Flask MLOps service to AWS EC2 with Docker.',
+      level: 'Advanced',
+      technology: 'AWS EC2 + Vercel'
     }
   ];
 }
