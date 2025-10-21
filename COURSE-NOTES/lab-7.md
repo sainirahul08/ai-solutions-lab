@@ -25,7 +25,7 @@ You must complete Labs 1-6 with working Docker containers and Kubernetes knowled
 - ✅ Kubernetes deployment working from Lab 6
 - ✅ Next.js app running locally
 - ✅ AWS account created (from Lab 1)
-- ✅ Credit/debit card for AWS (free tier available)
+- ✅ Credit/debit card for AWS (using free tier only)
 
 ### 🔍 Quick Test
 
@@ -43,7 +43,7 @@ npm run build
 
 ### 📝 Important Note
 
-This lab deploys to **real cloud services** that may incur costs. We'll use AWS free tier where possible, but monitor your billing dashboard throughout this lab.
+This lab uses **AWS free tier** exclusively. Everything you'll do in this lab is covered under AWS free tier - you won't be charged as long as you use the resources specified in this lab (t2.micro instance, 8 GB storage).
 
 ---
 
@@ -313,9 +313,10 @@ chmod 400 ~/.ssh/mlops-service-key.pem
 3. Keep "64-bit (x86)" architecture
 
 **Instance type:**
-- Select **t2.micro** (free tier eligible)
+- Select **t2.micro** (free tier - required for this course)
 - 1 vCPU, 1 GB RAM
 - Good enough for our MLOps service
+- **Important:** Only use t2.micro to stay within free tier
 
 **Key pair:**
 - Select the key pair you created: `mlops-service-key`
@@ -640,91 +641,77 @@ docker run -d \
 
 ---
 
-## Part F: Cost Monitoring & AWS Billing Alerts
+## Part F: Understanding AWS Free Tier
 
-*Keep track of your AWS spending*
+*Learn about AWS free tier and how to track your usage*
 
 ### 1. Understanding AWS Costs
 
-**What you're paying for:**
+**AWS Free Tier (What We're Using):**
 
-- **EC2 t2.micro:** Free tier eligible (750 hours/month for 12 months)
-- **Storage (EBS):** 8 GB included in free tier
+- **EC2 t2.micro:** 750 hours/month for 12 months (enough for 24/7 operation with one instance)
+- **Storage (EBS):** 30 GB included in free tier (we're using 8 GB)
 - **Data transfer:** 1 GB outbound free per month
 
-**💡 After Free Tier:**
-- t2.micro: ~$8-10/month if running 24/7
-- Storage: ~$1/month for 8 GB
-- Data transfer: Usually minimal for small apps
+**💡 Staying Within Free Tier:**
+- Use only ONE t2.micro instance
+- Keep it running under 750 hours/month (31 days = 744 hours - you're covered!)
+- Use 8 GB storage (well under 30 GB limit)
+- Free tier is valid for 12 months from AWS account creation
 
-### 2. Set Up Billing Alerts
+### 2. Enable Free Tier Usage Alerts (Optional)
 
-**Create a billing alarm:**
+**Get notifications about your free tier usage:**
 
 1. Go to AWS Console
 2. Search for "Billing" and click "Billing and Cost Management"
 3. Click "Billing preferences" in left sidebar
 4. Enable:
-   - ✅ Receive PDF Invoice By Email
    - ✅ Receive Free Tier Usage Alerts
-   - ✅ Receive Billing Alerts
 5. Enter your email address
 6. Click "Save preferences"
 
-**Create CloudWatch Alarm:**
+**What this does:**
+- AWS will email you when you approach 85% of free tier limits
+- Helpful to know your usage, but not required
+- This lab stays well within limits, so you shouldn't receive alerts
 
-1. Go to CloudWatch service
-2. Click "Alarms" → "Billing"
-3. Click "Create alarm"
-4. Set threshold: $5 USD (or your preferred amount)
-5. Create SNS topic with your email
-6. Confirm email subscription
-7. Name alarm: "Monthly Billing Alert"
+### 3. Check Your Free Tier Usage (Optional)
 
-**✅ You'll receive email if charges exceed $5**
-
-### 3. Monitor Your Usage
-
-**Check current costs:**
+**View what you're using:**
 
 1. Go to "Billing Dashboard"
-2. View "Month-to-Date Spending"
-3. Check "Free Tier Usage" section
-
-**Verify free tier usage:**
-
-1. Click "Free Tier" in left sidebar
-2. Review:
-   - EC2 instance hours used
-   - Storage used
+2. Click "Free Tier" in left sidebar
+3. You'll see:
+   - EC2 instance hours used (out of 750/month)
+   - Storage used (out of 30 GB)
    - Data transfer used
 
-### 4. Cost Optimization Tips
+**What you should see:**
+- EC2: A few hours used (well under 750 limit)
+- Storage: 8 GB (well under 30 GB limit)
+- Everything in the green/safe zone
 
-**Save money on your deployment:**
+### 4. Free Tier Tips
 
-- **Stop EC2 when not in use:** Stop instance from EC2 console (still charged for storage)
-- **Use free tier:** Stay within 750 hours/month for t2.micro
-- **Monitor data transfer:** Large file uploads can cost money
-- **Set up auto-shutdown:** Schedule EC2 to stop during off-hours
+**Staying within free tier:**
 
-**Stop EC2 instance (keeps your setup):**
+- **Use only what's in this lab:** t2.micro instance, 8 GB storage
+- **Don't launch additional instances:** One t2.micro is enough
+- **Free tier = 750 hours/month:** Running one instance 24/7 uses only 744 hours - you're covered!
+- **After the course:** Remember to terminate your EC2 instance when you're done learning
 
-```bash
-# Via AWS CLI (if installed)
-aws ec2 stop-instances --instance-ids YOUR_INSTANCE_ID
-
-# Or use AWS Console:
-# EC2 → Instances → Select instance → Instance state → Stop
-```
-
-**Start instance again:**
+**Terminate EC2 instance when finished with the course:**
 
 ```bash
-# Via AWS CLI
-aws ec2 start-instances --instance-ids YOUR_INSTANCE_ID
+# Via AWS Console (recommended):
+# 1. Go to EC2 → Instances
+# 2. Select your instance
+# 3. Instance state → Terminate instance
+# 4. Confirm termination
 
-# Note: Public IP may change after stop/start
+# This removes the instance completely
+# Do this when you're completely done with the course
 ```
 
 ---
@@ -765,12 +752,13 @@ df -h
 # If low, clean up: docker system prune -a
 ```
 
-### High AWS bills:
+### Seeing unexpected charges:
 
-**Verify you're on free tier:**
-- Billing Dashboard → Free Tier
-- Check EC2 hours used (should be under 750/month)
-- Stop instance when not needed
+**This shouldn't happen with this lab, but if you do see charges:**
+- Verify you selected t2.micro (not t2.small or larger)
+- Check if you accidentally launched multiple instances
+- Make sure you're within your 12-month free tier period
+- Contact AWS support - they're usually helpful with accidental charges
 
 ---
 
@@ -784,7 +772,7 @@ Congratulations! You've deployed a complete production AI application to the clo
 - **AWS EC2:** Virtual machine management and Docker deployment
 - **Cloud Architecture:** Multi-service cloud infrastructure
 - **Environment Management:** Secure production configuration
-- **Cost Monitoring:** AWS billing alerts and optimization
+- **Free Tier Management:** Understanding AWS free tier limits
 
 ### 🚀 What You Built
 
@@ -823,7 +811,7 @@ Prometheus Metrics (Real-time Monitoring)
 - **Vercel optimizes Next.js** automatically (CDN, caching, edge functions)
 - **EC2 gives full control** over your server environment
 - **Docker ensures consistency** between local and production
-- **Cost monitoring is essential** to avoid surprise bills
+- **AWS free tier covers everything** in this lab - no charges when following instructions
 - **Environment variables protect secrets** across deployments
 
 ### 💡 Cost Summary (After Free Tier)
