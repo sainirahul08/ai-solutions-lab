@@ -59,6 +59,13 @@ export function getAllLabsSummary(): LabSummary[] {
       description: 'Deploy your complete AI application stack to production: Next.js to Vercel and Flask MLOps service to AWS EC2 with Docker.',
       level: 'Advanced',
       technology: 'AWS EC2 + Vercel'
+    },
+    {
+      id: 'lab8',
+      title: 'Lab 8: Serverless Deployment with AWS Lambda',
+      description: 'Convert your Flask MLOps service to serverless architecture using AWS Lambda and API Gateway for cost-effective, auto-scaling deployment.',
+      level: 'Advanced',
+      technology: 'AWS Lambda + API Gateway'
     }
   ];
 }
