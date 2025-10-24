@@ -831,6 +831,21 @@ In Lab 8, you'll convert your Flask MLOps service to AWS Lambda (serverless), wh
 
 ---
 
+## 📝 Test Your Knowledge
+
+**Complete the Lab 7 Quiz** to test your understanding of cloud deployment concepts with AWS EC2 and Vercel.
+
+**[Take Lab 7 Quiz →](https://chat.leverlabs.co/quizzes/lab7-quiz.html)**
+
+After completing the quiz, take a screenshot of your results page for submission. The screenshot will include:
+- Your name
+- Your score
+- A unique Session ID
+- Timestamp
+- Browser information
+
+---
+
 **Navigation:**
 - [← Lab 6: Kubernetes](/labs/lab6)
 - [Back to Labs →](/labs)

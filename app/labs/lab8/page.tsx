@@ -1505,6 +1505,22 @@ def lambda_handler(event, context):
         </CardContent>
       </Card>
 
+      {/* Quiz Section */}
+      <div className="bg-gradient-to-r from-pink-50 to-purple-50 border-2 border-pink-200 rounded-lg p-6">
+        <h3 className="text-xl font-semibold text-gray-900 mb-3">📝 Test Your Knowledge</h3>
+        <p className="text-gray-700 mb-4">
+          Complete the Lab 8 quiz to test your understanding of serverless deployment with AWS Lambda and API Gateway.
+        </p>
+        <a
+          href="/quizzes/lab8-quiz.html"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-block px-6 py-3 bg-gradient-to-r from-pink-600 to-purple-600 text-white font-semibold rounded-lg hover:from-pink-700 hover:to-purple-700 transition-all duration-300 shadow-md hover:shadow-lg"
+        >
+          Take Lab 8 Quiz →
+        </a>
+      </div>
+
       {/* Navigation */}
       <div className="flex justify-between items-center pt-8 border-t">
         <a href="/labs/lab7" className="text-blue-600 hover:underline flex items-center gap-2">

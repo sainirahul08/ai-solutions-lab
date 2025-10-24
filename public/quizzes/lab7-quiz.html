@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 7 Quiz - Cloud Deployment with AWS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            width: 100%;
+            padding: 40px;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        h1 {
+            color: #1a202c;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #718096;
+            font-size: 1rem;
+        }
+
+        .student-info {
+            background: #f7fafc;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 0;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .question {
+            background: #f7fafc;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .question:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .question-header {
+            font-weight: 600;
+            color: #1a202c;
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .option input[type="radio"] {
+            margin-right: 12px;
+            cursor: pointer;
+            width: 20px;
+            height: 20px;
+            accent-color: #667eea;
+        }
+
+        .option label {
+            cursor: pointer;
+            margin: 0;
+            font-weight: 400;
+            flex: 1;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            background: #cbd5e0;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .result {
+            display: none;
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 30px;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .result h2 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .result p {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .score {
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .retry-btn {
+            margin-top: 20px;
+            padding: 12px 30px;
+            background: white;
+            color: #38a169;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .retry-btn:hover {
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .question {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Lab 7 Quiz</h1>
+            <p class="subtitle">Cloud Deployment with AWS</p>
+        </div>
+
+        <form id="quizForm">
+            <div class="student-info">
+                <div class="input-group">
+                    <label for="studentName">Student Name *</label>
+                    <input type="text" id="studentName" name="studentName" required placeholder="Enter your full name">
+                </div>
+            </div>
+
+            <!-- Question 1 -->
+            <div class="question">
+                <div class="question-header">
+                    1. What is the primary advantage of deploying to the cloud compared to running applications locally?
+                </div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q1a" name="q1" value="a" required>
+                        <label for="q1a">It's always cheaper than local hosting</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q1b" name="q1" value="b">
+                        <label for="q1b">Applications are available 24/7 and accessible from anywhere in the world</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q1c" name="q1" value="c">
+                        <label for="q1c">You don't need to write any code</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q1d" name="q1" value="d">
+                        <label for="q1d">Cloud hosting doesn't require internet connection</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="question">
+                <div class="question-header">
+                    2. In Lab 7's architecture, what is Vercel used for?
+                </div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q2a" name="q2" value="a" required>
+                        <label for="q2a">Hosting the PostgreSQL database</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q2b" name="q2" value="b">
+                        <label for="q2b">Deploying and hosting the Next.js frontend application</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q2c" name="q2" value="c">
+                        <label for="q2c">Running Docker containers</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q2d" name="q2" value="d">
+                        <label for="q2d">Managing AWS EC2 instances</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="question">
+                <div class="question-header">
+                    3. What AWS instance type should you use to stay within the free tier limits?
+                </div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q3a" name="q3" value="a" required>
+                        <label for="q3a">t3.large</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q3b" name="q3" value="b">
+                        <label for="q3b">t2.micro</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q3c" name="q3" value="c">
+                        <label for="q3c">t2.medium</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q3d" name="q3" value="d">
+                        <label for="q3d">m5.xlarge</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="question">
+                <div class="question-header">
+                    4. What is the purpose of a Security Group in AWS EC2?
+                </div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q4a" name="q4" value="a" required>
+                        <label for="q4a">To automatically scale your application</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q4b" name="q4" value="b">
+                        <label for="q4b">To control network access and define which ports are open to traffic</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q4c" name="q4" value="c">
+                        <label for="q4c">To manage user authentication</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q4d" name="q4" value="d">
+                        <label for="q4d">To backup your database</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="question">
+                <div class="question-header">
+                    5. How many hours per month does AWS free tier provide for a t2.micro EC2 instance?
+                </div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q5a" name="q5" value="a" required>
+                        <label for="q5a">100 hours/month</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q5b" name="q5" value="b">
+                        <label for="q5b">500 hours/month</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q5c" name="q5" value="c">
+                        <label for="q5c">750 hours/month (enough for 24/7 operation)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q5d" name="q5" value="d">
+                        <label for="q5d">Unlimited hours</label>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">Submit Quiz</button>
+        </form>
+
+        <div class="result" id="result">
+            <h2>Quiz Complete!</h2>
+            <p id="studentNameDisplay"></p>
+            <div class="score" id="scoreDisplay"></div>
+            <p id="resultMessage"></p>
+            <div style="margin-top: 20px; padding: 15px; background: rgba(255,255,255,0.2); border-radius: 8px; font-size: 0.9rem;">
+                <p style="margin: 5px 0;"><strong>Session ID:</strong> <span id="sessionId"></span></p>
+                <p style="margin: 5px 0;"><strong>Timestamp:</strong> <span id="timestamp"></span></p>
+                <p style="margin: 5px 0;"><strong>Browser:</strong> <span id="browserInfo"></span></p>
+            </div>
+            <p style="margin-top: 15px; font-size: 0.85rem; opacity: 0.9;">📸 Take a screenshot of this page for your submission</p>
+            <button class="retry-btn" onclick="location.reload()">Retake Quiz</button>
+        </div>
+    </div>
+
+    <script>
+        const correctAnswers = {
+            q1: 'b',
+            q2: 'b',
+            q3: 'b',
+            q4: 'b',
+            q5: 'c'
+        };
+
+        // Generate unique session ID based on browser fingerprint
+        function generateSessionId() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            ctx.textBaseline = 'top';
+            ctx.font = '14px Arial';
+            ctx.fillText('fingerprint', 2, 2);
+            const canvasData = canvas.toDataURL();
+
+            const timestamp = Date.now();
+            const random = Math.random().toString(36).substring(2, 15);
+            const screenRes = `${screen.width}x${screen.height}`;
+            const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+            // Create a simple hash
+            const str = canvasData + navigator.userAgent + screenRes + timezone + random;
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                const char = str.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash;
+            }
+
+            return `LAB7-${Math.abs(hash).toString(36).toUpperCase()}-${timestamp.toString(36).toUpperCase()}`;
+        }
+
+        function getBrowserInfo() {
+            const ua = navigator.userAgent;
+            let browser = 'Unknown';
+
+            if (ua.indexOf('Firefox') > -1) browser = 'Firefox';
+            else if (ua.indexOf('Chrome') > -1) browser = 'Chrome';
+            else if (ua.indexOf('Safari') > -1) browser = 'Safari';
+            else if (ua.indexOf('Edge') > -1) browser = 'Edge';
+
+            const platform = navigator.platform || 'Unknown';
+            return `${browser} on ${platform}`;
+        }
+
+        document.getElementById('quizForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const studentName = document.getElementById('studentName').value;
+            let score = 0;
+            const totalQuestions = Object.keys(correctAnswers).length;
+
+            // Calculate score
+            for (let question in correctAnswers) {
+                const selectedAnswer = document.querySelector(`input[name="${question}"]:checked`);
+                if (selectedAnswer && selectedAnswer.value === correctAnswers[question]) {
+                    score++;
+                }
+            }
+
+            // Calculate percentage
+            const percentage = Math.round((score / totalQuestions) * 100);
+
+            // Generate unique identifiers
+            const sessionId = generateSessionId();
+            const timestamp = new Date().toLocaleString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true
+            });
+            const browserInfo = getBrowserInfo();
+
+            // Display result
+            document.getElementById('quizForm').style.display = 'none';
+            document.getElementById('studentNameDisplay').textContent = `Student: ${studentName}`;
+            document.getElementById('scoreDisplay').textContent = `${score}/${totalQuestions}`;
+            document.getElementById('sessionId').textContent = sessionId;
+            document.getElementById('timestamp').textContent = timestamp;
+            document.getElementById('browserInfo').textContent = browserInfo;
+
+            let message = '';
+            if (percentage >= 80) {
+                message = `Excellent work! You scored ${percentage}%. You have a strong understanding of cloud deployment concepts!`;
+            } else if (percentage >= 60) {
+                message = `Good job! You scored ${percentage}%. Review the lab materials to strengthen your understanding.`;
+            } else {
+                message = `You scored ${percentage}%. Consider reviewing Lab 7 materials and retaking the quiz.`;
+            }
+
+            document.getElementById('resultMessage').textContent = message;
+            document.getElementById('result').classList.add('show');
+        });
+    </script>
+</body>
+</html>

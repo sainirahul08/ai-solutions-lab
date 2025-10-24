@@ -961,6 +961,21 @@ Next.js (Vercel) → API Gateway → Lambda → Neon PostgreSQL
 
 ---
 
+## 📝 Test Your Knowledge
+
+**Complete the Lab 8 Quiz** to test your understanding of serverless deployment with AWS Lambda and API Gateway.
+
+**[Take Lab 8 Quiz →](https://chat.leverlabs.co/quizzes/lab8-quiz.html)**
+
+After completing the quiz, take a screenshot of your results page for submission. The screenshot will include:
+- Your name
+- Your score
+- A unique Session ID
+- Timestamp
+- Browser information
+
+---
+
 **Navigation:**
 - [← Lab 7: Cloud Deployment](/labs/lab7)
 - [Back to Labs →](/labs)
