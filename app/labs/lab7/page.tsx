@@ -367,6 +367,22 @@ curl http://YOUR_EC2_PUBLIC_IP:5001/health`}</CodeBlock>
           </p>
         </div>
 
+        {/* Quiz Section */}
+        <div className="bg-gradient-to-r from-purple-50 to-blue-50 border-2 border-purple-200 rounded-lg p-6 mb-6">
+          <h3 className="text-xl font-semibold text-gray-900 mb-3">📝 Test Your Knowledge</h3>
+          <p className="text-gray-700 mb-4">
+            Complete the Lab 7 quiz to test your understanding of cloud deployment concepts with AWS EC2 and Vercel.
+          </p>
+          <a
+            href="/quizzes/lab7-quiz.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all duration-300 shadow-md hover:shadow-lg"
+          >
+            Take Lab 7 Quiz →
+          </a>
+        </div>
+
         {/* Navigation */}
         <div className="flex justify-between items-center mt-12 pt-8 border-t border-gray-200">
           <div>
