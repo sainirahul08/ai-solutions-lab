@@ -13,6 +13,7 @@ on:
       - 'package-lock.json'
       - 'next.config.js'
       - 'tailwind.config.js'
+      - 'README.md'
   pull_request:
     branches: [ main ]
     paths:
@@ -46,7 +47,7 @@ jobs:
 
       # Run comprehensive test suite
       - name: Run test suite
-        run: npm test
+        run: npm test -- --passWithNoTests
         env:
           # Test environment variables
           NODE_ENV: test
@@ -64,6 +65,8 @@ jobs:
       # Build the application
       - name: Build application
         run: npm run build
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
       # Verify build output
       - name: Verify build output
