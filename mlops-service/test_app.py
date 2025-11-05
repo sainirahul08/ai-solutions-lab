@@ -275,3 +275,23 @@ class TestCORSHeaders:
 
 if __name__ == '__main__':
     pytest.main([__file__, '-v'])
+
+
+
+class TestMyCustomTest:
+    """My custom test class"""
+
+    def test_flask_app_exists(self, client):
+        """Test that our Flask app responds to requests"""
+        response = client.get('/health')
+        assert response.status_code == 200
+
+    def test_track_endpoint_requires_json(self, client):
+        """Test that track endpoint requires JSON data"""
+        # Send empty request
+        response = client.post('/track')
+        assert response.status_code == 500  # Flask returns 500 for JSON errors
+
+        # Check error message
+        data = json.loads(response.data)
+        assert 'error' in data

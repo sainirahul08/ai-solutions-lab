@@ -174,7 +174,7 @@ def dashboard():
     Serve the MLOps dashboard
     """
     try:
-        with open('dashboard.html', 'r') as f:
+        with open('dashboard.html', 'r', encoding='utf-8') as f:
             return f.read()
     except FileNotFoundError:
         return jsonify({
@@ -525,4 +525,4 @@ if __name__ == '__main__':
     print("")
     
     # Run Flask app in development mode
-    app.run(host='0.0.0.0', port=service_port, debug=True)"# CI/CD Pipeline Test" 
+    app.run(host='0.0.0.0', port=service_port, debug=True)
