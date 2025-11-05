@@ -66,6 +66,13 @@ export function getAllLabsSummary(): LabSummary[] {
       description: 'Convert your Flask MLOps service to serverless architecture using AWS Lambda and API Gateway for cost-effective, auto-scaling deployment.',
       level: 'Advanced',
       technology: 'AWS Lambda + API Gateway'
+    },
+    {
+      id: 'lab9',
+      title: 'Lab 9: Monitoring & Logging for Production AI Systems',
+      description: 'Learn production monitoring concepts, explore AWS CloudWatch for deployed Lambda functions, and enhance your Prometheus dashboard with detailed health checks and metrics.',
+      level: 'Advanced',
+      technology: 'CloudWatch + Prometheus'
     }
   ];
 }

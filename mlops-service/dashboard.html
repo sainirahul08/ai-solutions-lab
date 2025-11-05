@@ -144,7 +144,10 @@
         <div class="endpoints">
             <h3>📊 Available Endpoints</h3>
             <a href="http://localhost:5001/health" target="_blank" class="endpoint-link">
-                🏥 Health Check - http://localhost:5001/health
+                🏥 Basic Health Check - http://localhost:5001/health
+            </a>
+            <a href="http://localhost:5001/health/detailed" target="_blank" class="endpoint-link">
+                🔍 Detailed Health Check - http://localhost:5001/health/detailed
             </a>
             <a href="http://localhost:5001/metrics" target="_blank" class="endpoint-link">
                 📈 Raw Prometheus Metrics - http://localhost:5001/metrics
@@ -170,7 +173,7 @@
 
         async function fetchHealth() {
             try {
-                const response = await fetch('http://localhost:5001/health');
+                const response = await fetch('http://localhost:5001/health/detailed');
                 return await response.json();
             } catch (error) {
                 console.error('Health check failed:', error);
@@ -244,6 +247,18 @@
             const isHealthy = health.status === 'healthy';
             const statusClass = isHealthy ? 'status-healthy' : 'status-error';
             
+            const uptime = health.uptime || {};
+            const system = health.system || {};
+            const requests = health.requests || {};
+            const healthChecks = health.health_checks || {};
+
+            const uptimeDisplay = uptime.hours < 24
+                ? `${uptime.hours} hours`
+                : `${uptime.days} days`;
+
+            const errorRateClass = requests.error_rate_percent > 10 ? 'status-error' :
+                                   requests.error_rate_percent > 5 ? 'status-warning' : 'status-healthy';
+
             grid.innerHTML = `
                 <div class="metric-card">
                     <div class="metric-title">Service Status</div>
@@ -251,33 +266,63 @@
                         <span class="status-indicator ${statusClass}"></span>
                         ${health.status || 'Unknown'}
                     </div>
-                    <div class="metric-unit">Last updated: ${new Date().toLocaleTimeString()}</div>
+                    <div class="metric-unit">Environment: ${health.environment || 'unknown'}</div>
                 </div>
-                
+
                 <div class="metric-card">
-                    <div class="metric-title">Total AI Requests</div>
-                    <div class="metric-value">${metrics?.totalRequests || 0}</div>
-                    <div class="metric-unit">conversations processed</div>
+                    <div class="metric-title">Service Uptime</div>
+                    <div class="metric-value">${uptimeDisplay}</div>
+                    <div class="metric-unit">Since ${new Date(uptime.started_at).toLocaleString()}</div>
                 </div>
-                
+
+                <div class="metric-card">
+                    <div class="metric-title">Total Requests</div>
+                    <div class="metric-value">${requests.total || 0}</div>
+                    <div class="metric-unit">Tracked: ${metrics?.totalRequests || 0} AI conversations</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-title">Error Rate</div>
+                    <div class="metric-value">
+                        <span class="status-indicator ${errorRateClass}"></span>
+                        ${requests.error_rate_percent || 0}%
+                    </div>
+                    <div class="metric-unit">${requests.failed || 0} failed requests</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-title">Memory Usage</div>
+                    <div class="metric-value">${system.memory_usage_mb || 0} MB</div>
+                    <div class="metric-unit">CPU: ${system.cpu_percent || 0}%</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-title">Database Status</div>
+                    <div class="metric-value">
+                        <span class="status-indicator ${healthChecks.database_connected ? 'status-healthy' : 'status-error'}"></span>
+                        ${healthChecks.database_connected ? 'Connected' : 'Disconnected'}
+                    </div>
+                    <div class="metric-unit">Prometheus: Active</div>
+                </div>
+
                 <div class="metric-card">
                     <div class="metric-title">Total Tokens Used</div>
                     <div class="metric-value">${(metrics?.totalTokens || 0).toLocaleString()}</div>
                     <div class="metric-unit">AI tokens consumed</div>
                 </div>
-                
+
                 <div class="metric-card">
                     <div class="metric-title">Total API Cost</div>
                     <div class="metric-value">$${(metrics?.totalCost || 0).toFixed(4)}</div>
                     <div class="metric-unit">USD spent on AI</div>
                 </div>
-                
+
                 <div class="metric-card">
-                    <div class="metric-title">Appointments Requested</div>
+                    <div class="metric-title">Appointments</div>
                     <div class="metric-value">${metrics?.appointments || 0}</div>
-                    <div class="metric-unit">booking attempts</div>
+                    <div class="metric-unit">booking requests</div>
                 </div>
-                
+
                 <div class="metric-card">
                     <div class="metric-title">Human Handoffs</div>
                     <div class="metric-value">${metrics?.handoffs || 0}</div>
