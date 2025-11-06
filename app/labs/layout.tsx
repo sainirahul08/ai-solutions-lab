@@ -264,6 +264,42 @@ const labConfigs = {
       { id: 'code-optimization', title: '3. Code Optimization' },
       { id: 'troubleshooting', title: 'Troubleshooting' },
     ]
+  },
+  'lab9': {
+    title: 'Lab 9: Monitoring & Logging for Production AI Systems',
+    sections: [
+      { id: 'overview', title: 'Lab Overview' },
+      { id: 'prerequisites', title: 'Prerequisites Check' },
+      { id: 'part-a', title: 'Part A: Understanding Production Monitoring' },
+      { id: 'golden-signals', title: '1. The 4 Golden Signals' },
+      { id: 'monitoring-vs-logging', title: '2. Monitoring vs Logging vs Tracing' },
+      { id: 'why-monitor', title: '3. Why Monitor Production Systems?' },
+      { id: 'part-b', title: 'Part B: Explore AWS CloudWatch' },
+      { id: 'what-is-cloudwatch', title: '1. What is AWS CloudWatch?' },
+      { id: 'view-metrics', title: '2. View Lambda Metrics' },
+      { id: 'view-logs', title: '3. View Lambda Logs' },
+      { id: 'test-lambda', title: '4. Test and Observe Metrics' },
+      { id: 'part-c', title: 'Part C: CloudWatch Alarms' },
+      { id: 'why-alarms', title: '1. Why Set Up Alarms?' },
+      { id: 'create-sns', title: '2. Create SNS Topic' },
+      { id: 'create-alarm', title: '3. Create Error Rate Alarm' },
+      { id: 'test-alarm', title: '4. Test Alarm (Optional)' },
+      { id: 'part-d', title: 'Part D: Enhanced Prometheus Dashboard' },
+      { id: 'production-monitoring', title: '1. What We\'re Adding' },
+      { id: 'update-dependencies', title: '2. Update Flask Dependencies' },
+      { id: 'code-enhancements', title: '3. Code Enhancements' },
+      { id: 'test-endpoints', title: '4. Test Enhanced Endpoints' },
+      { id: 'view-dashboard', title: '5. View Enhanced Dashboard' },
+      { id: 'part-e', title: 'Part E: Production Best Practices' },
+      { id: 'alert-thresholds', title: '1. Setting Alert Thresholds' },
+      { id: 'cost-tracking', title: '2. Track AI API Costs' },
+      { id: 'log-levels', title: '3. Use Appropriate Log Levels' },
+      { id: 'retention', title: '4. Log and Metric Retention' },
+      { id: 'part-f', title: 'Part F: CloudWatch vs Prometheus' },
+      { id: 'comparison-table', title: 'CloudWatch vs Prometheus' },
+      { id: 'when-to-use', title: 'When to Use Each' },
+      { id: 'troubleshooting', title: 'Troubleshooting' },
+    ]
   }
 }
 
