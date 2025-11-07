@@ -636,3 +636,10 @@ if __name__ == '__main__':
     
     # Run Flask app in development mode
     app.run(host='0.0.0.0', port=service_port, debug=True)
+
+# Update CORS configuration    
+CORS(app, origins=[
+    "http://localhost:3000",           # Local development
+    "https://ai-solutions-lab-psi.vercel.app",     # Production Vercel
+    "https://*.vercel.app"             # Vercel preview deployments
+])
